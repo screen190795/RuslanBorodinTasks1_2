@@ -15,7 +15,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class TestsTask1 extends TestBase{
+public class Tests extends TestBase{
 
     @Test
     /*
