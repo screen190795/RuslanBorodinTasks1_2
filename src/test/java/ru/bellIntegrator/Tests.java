@@ -4,11 +4,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import ru.bellIntegrator.page.factory.GoogleSearch;
 import ru.bellIntegrator.page.object.GoogleAfterSearch;
 import ru.bellIntegrator.page.object.GoogleBeforeSearch;
 import ru.bellIntegrator.page.object.OpenRuMain;
+import ru.bellIntegrator.page.object.SberbankASTMain;
 
 
 import java.util.List;
@@ -63,4 +66,19 @@ public class Tests extends TestBase{
                 .collect(toList());
         Assertions.assertTrue(testRates.get(0)<testRates.get(1),"некорректное отображение курса");
     }
+
+    @Test
+    public void SberbankMenu()
+    {
+        SberbankASTMain sberbankASTMain= new SberbankASTMain(driver);
+        sberbankASTMain.goToPage();
+       //List<WebElement> menuElements =  driver.findElements(By.xpath(sberbankASTMain.getSelectorSubMenuHeader()));
+        //menuElements.forEach(x->System.out.println(x.getText()));
+        //System.out.println("Пункты субменю:");
+        //List<WebElement> submenuElements =  driver.findElements(By.xpath("//ul[@class='navSubmenu']/li//ul//a[text()]"));
+        //submenuElements.forEach(x->System.out.println(x.getAttribute("innerText")));
+        sberbankASTMain.getCollectSubMenuLinks();
+            Assertions.assertTrue(1==1);
+    }
+
 }
