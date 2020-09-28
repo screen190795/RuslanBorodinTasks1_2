@@ -68,15 +68,9 @@ public class Tests extends TestBase{
     }
 
     @Test
-    public void SberbankMenu()
-    {
+    public void SberbankMenu() throws InterruptedException {
         SberbankASTMain sberbankASTMain= new SberbankASTMain(driver);
         sberbankASTMain.goToPage();
-       //List<WebElement> menuElements =  driver.findElements(By.xpath(sberbankASTMain.getSelectorSubMenuHeader()));
-        //menuElements.forEach(x->System.out.println(x.getText()));
-        //System.out.println("Пункты субменю:");
-        //List<WebElement> submenuElements =  driver.findElements(By.xpath("//ul[@class='navSubmenu']/li//ul//a[text()]"));
-        //submenuElements.forEach(x->System.out.println(x.getAttribute("innerText")));
         sberbankASTMain.getCollectSubMenuLinks();
             Assertions.assertTrue(1==1);
     }
