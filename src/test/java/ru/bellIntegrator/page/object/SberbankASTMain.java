@@ -41,7 +41,9 @@ public class SberbankASTMain {
         allMainMenuElements = new ArrayList<>();
         List<WebElement> mainMenuTopElements =  driver.findElements(By.xpath(this.selectorMainMenuTop));
             for(int i = 0; i < mainMenuTopElements.size(); i++){
-                List<WebElement> mainMenuSubElements = driver.findElements(By.xpath("//nav/ul[@class='navSubmenu']/li[not(./a[@class='SearchIco'])]["+(i+1)+"]//a"));
+                List<WebElement> mainMenuSubElements = driver.findElement(By.xpath(selectorMainMenu))
+                        .findElements(By.xpath(selectorMainMenuTop + "["+(i+1)+"]//a"));
+
                 for (WebElement subElement : mainMenuSubElements) {
                     Map<WebElement, WebElement> collectSubLinks = new HashMap<>();
                     collectSubLinks.put(mainMenuTopElements.get(i), subElement);

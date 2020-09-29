@@ -69,6 +69,26 @@ public class Tests extends TestBase{
         Assertions.assertTrue(testRates.get(0)<testRates.get(1),"некорректное отображение курса");
     }
 
+    @Test
+    public void SberbankMenu()  {
 
+        SberbankASTMain sberbankASTMain= new SberbankASTMain(driver);
+        sberbankASTMain.collectSubMenuLinks();
+        //sberbankASTMain.getMainMenuTopElements().forEach(x->System.out.println(x.getText() + "!"));
+        //sberbankASTMain.getMainMenuSubLinks().forEach(x->System.out.println(x.getAttribute("innerText") + "!!"));
+
+        for (Map<WebElement, WebElement> map : sberbankASTMain.collectSubMenuLinks()) {
+            for (Map.Entry entry : map.entrySet()) {
+                WebElement top = (WebElement) entry.getKey();
+                WebElement sub = (WebElement) entry.getValue();
+                System.out.println(top.getText() + " : " + sub.getAttribute("innerText"));
+
+            }
+        }
+        System.out.println(sberbankASTMain.collectSubMenuLinks().size());
+        sberbankASTMain.goToSubLink("Главная","Контакты");
+            Assertions.assertTrue(1==1);
+
+    }
 
 }
