@@ -3,6 +3,7 @@ package ru.bellIntegrator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
@@ -15,6 +16,7 @@ import ru.bellIntegrator.page.object.SberbankASTMain;
 
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -67,12 +69,6 @@ public class Tests extends TestBase{
         Assertions.assertTrue(testRates.get(0)<testRates.get(1),"некорректное отображение курса");
     }
 
-    @Test
-    public void SberbankMenu() throws InterruptedException {
-        SberbankASTMain sberbankASTMain= new SberbankASTMain(driver);
-        sberbankASTMain.goToPage();
-        sberbankASTMain.getCollectSubMenuLinks();
-            Assertions.assertTrue(1==1);
-    }
+
 
 }

@@ -3,56 +3,80 @@ package ru.bellIntegrator.page.object;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-
 import java.util.*;
+import java.util.Map.Entry;
 
 public class SberbankASTMain {
-
-    private String selectorMainMenu ="//nav[ul[@class='navSubmenu']]";
-    private String selectorSubMenuHeader = "//ul[@class='navSubmenu']/li";
-    private String selectorSubMenuTitle = "//ul[@class='navSubmenu']/li/h3";
-    private String selectorSubMenuElement = "//ul[@class='navSubmenu']/li//a";
     private WebDriver driver;
-    private WebElement subMenuLinks;
+
+    //Корневая таблица главного меню
+    private String selectorMainMenu ="//nav/ul[@class='navSubmenu']";
+    //пункты меню
+    private String selectorMainMenuTop = "//ul[@class='navSubmenu']/li[not(./a[@class='SearchIco'])]";
+    // ссылки - пункты подменю
+    private String selectorMainMenuSubLink = "//ul[@class='navSubmenu']//a[not(@class='SearchIco')]";
+
+
+
     private WebElement mainMenu;
-    private List<Map<String,String>> collectSubMenuLinks = new ArrayList<>();
-    private String mainURL="https://www.sberbank-ast.ru/";
+    private List<WebElement> mainMenuTopElements;
+    private  List<WebElement> mainMenuSubLinks;
+    private List<Map<WebElement,WebElement>> allMainMenuElements;
+
+    private String sberbankAstURL="https://www.sberbank-ast.ru/";
 
     public SberbankASTMain(WebDriver driver) {
         this.driver = driver;
+        driver.get(sberbankAstURL);
+        this.mainMenu = driver.findElement(By.xpath(selectorMainMenu));
+        this.mainMenuTopElements = mainMenu.findElements(By.xpath(selectorMainMenuTop));
+        this.mainMenuSubLinks = driver.findElements(By.xpath(selectorMainMenuSubLink));
     }
 
-    public List<Map<String, Object>> getCollectSubMenuLinks() throws InterruptedException {
-        List<Map<String,Object>> allMenu= new ArrayList<>();
-        List<WebElement> menuElements =  driver.findElements(By.xpath(this.getSelectorSubMenuHeader()));
 
-            for(int i = 0; i < menuElements.size(); i++){
-                List<WebElement> subelements = driver.findElements(By.xpath("//ul[@class='navSubmenu']/li["+(i+1)+"]//a"));
-                for (WebElement subelement : subelements) {
-                    Map<String, Object> collectSubLinks = new HashMap<>();
-                    collectSubLinks.put(menuElements.get(i).getText(), subelement.getAttribute("innerText"));
-                    allMenu.add(i, collectSubLinks);
+    /*
+     * метод собирает все пункты и подпункты главного меню
+     */
+    public List<Map<WebElement, WebElement>> collectSubMenuLinks() {
+        allMainMenuElements = new ArrayList<>();
+        List<WebElement> mainMenuTopElements =  driver.findElements(By.xpath(this.selectorMainMenuTop));
+            for(int i = 0; i < mainMenuTopElements.size(); i++){
+                List<WebElement> mainMenuSubElements = driver.findElements(By.xpath("//nav/ul[@class='navSubmenu']/li[not(./a[@class='SearchIco'])]["+(i+1)+"]//a"));
+                for (WebElement subElement : mainMenuSubElements) {
+                    Map<WebElement, WebElement> collectSubLinks = new HashMap<>();
+                    collectSubLinks.put(mainMenuTopElements.get(i), subElement);
+                    allMainMenuElements.add(i, collectSubLinks);
                 }
             }
-        allMenu.forEach(map -> map.forEach((key, value) -> System.out.println(key + ":" + value)));
-        System.out.println("Количество элементов: " + allMenu.size());
-            System.out.println("Размер коллекции: " + allMenu.size());
-            return  allMenu;
+
+            return  allMainMenuElements;
     }
 
+    /*
+     * Переход по ссылке подменю. На вход принимает названия элементов меню и подменю
+     */
+    public void goToSubLink(String topElement, String subElement )  {
+        for (Map<WebElement, WebElement> map : collectSubMenuLinks()){
+            for(Entry entry: map.entrySet()) {
+                WebElement top = (WebElement) entry.getKey();
+                WebElement sub = (WebElement) entry.getValue();
+                if(top.getText().equals(topElement) && sub.getAttribute("innerText").equals(subElement)){
+                    driver.get(sub.getAttribute("href"));
+                    break;
+                }
+            }
+        }
+    }
 
+    public WebDriver getDriver() {
+        return driver;
+    }
 
-    public void goToPage(){
-        driver.get(mainURL);
+    public List<WebElement> getMainMenuTopElements() {
+        return mainMenuTopElements;
     }
-    public String getSelectorMainMenu() {
-        return selectorMainMenu;
-    }
-    public String getSelectorSubMenuHeader() {
-        return selectorSubMenuHeader;
-    }
-    public String getSelectorSubMenuElement() {
-        return selectorSubMenuElement;
+
+    public List<WebElement> getMainMenuSubLinks() {
+        return mainMenuSubLinks;
     }
 }
