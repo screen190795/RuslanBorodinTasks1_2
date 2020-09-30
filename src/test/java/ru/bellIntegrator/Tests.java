@@ -3,12 +3,17 @@ package ru.bellIntegrator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.bellIntegrator.page.factory.GoogleSearch;
+import ru.bellIntegrator.page.factory.YandexMarket;
 import ru.bellIntegrator.page.object.GoogleAfterSearch;
 import ru.bellIntegrator.page.object.GoogleBeforeSearch;
 import ru.bellIntegrator.page.object.OpenRuMain;
@@ -71,24 +76,32 @@ public class Tests extends TestBase{
 
     @Test
     public void SberbankMenu()  {
-
         SberbankASTMain sberbankASTMain= new SberbankASTMain(driver);
         sberbankASTMain.collectSubMenuLinks();
-        //sberbankASTMain.getMainMenuTopElements().forEach(x->System.out.println(x.getText() + "!"));
-        //sberbankASTMain.getMainMenuSubLinks().forEach(x->System.out.println(x.getAttribute("innerText") + "!!"));
-
         for (Map<WebElement, WebElement> map : sberbankASTMain.collectSubMenuLinks()) {
             for (Map.Entry entry : map.entrySet()) {
                 WebElement top = (WebElement) entry.getKey();
                 WebElement sub = (WebElement) entry.getValue();
                 System.out.println(top.getText() + " : " + sub.getAttribute("innerText"));
-
             }
         }
         System.out.println(sberbankASTMain.collectSubMenuLinks().size());
         sberbankASTMain.goToSubLink("Главная","Контакты");
-            Assertions.assertTrue(1==1);
-
+        Assertions.assertTrue(1==1);
     }
 
+        @Test
+        public void yandexMarket() {
+
+            YandexMarket yandexMarket = PageFactory.initElements(driver,YandexMarket.class);
+            yandexMarket.goToMainURL();
+            yandexMarket.goToPage(yandexMarket.electroincsLink);
+            yandexMarket.electroincsLink.click();
+            yandexMarket.goToPage(yandexMarket.smartphonesLink);
+            yandexMarket.goToPage(yandexMarket.appleCheckBox);
+            yandexMarket.loadMore();
+            List<String> titles = yandexMarket.collectTitles();
+
+            Assertions.assertTrue(titles.stream().allMatch(x->x.contains("Apple")));
+        }
 }
