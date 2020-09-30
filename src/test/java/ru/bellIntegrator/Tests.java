@@ -78,7 +78,7 @@ public class Tests extends TestBase{
      * Проверка соответствия результатов поиска товара выбранному фильтру "Производитель"
      */
         @Test
-        public void yandexMarket() {
+        public void YandexMarketMaker() {
 
             YandexMarket yandexMarket = PageFactory.initElements(driver,YandexMarket.class);
             yandexMarket.goToMainURL();
