@@ -70,7 +70,7 @@ public class YandexMarket {
     /*
      * Открытие всех товаров в списке
      */
-    public void  loadMore()  {
+    public void  loadPages()  {
         try {
         while (showNextButton.isDisplayed()) {
             this.clickToElement(this.showNextButton);
