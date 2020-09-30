@@ -86,6 +86,6 @@ public class Tests extends TestBase{
             yandexMarket.addCategory("Смартфоны");
             yandexMarket.addMakerFilter("Apple");
             yandexMarket.loadPages();
-            Assertions.assertTrue(yandexMarket.collectTitles().stream().allMatch(x->x.contains("Apple")), "Несоответствие овара производителю");
+            Assertions.assertTrue(yandexMarket.collectTitles().stream().allMatch(x->x.contains("Apple")), "Несоответствие товара производителю");
         }
 }
