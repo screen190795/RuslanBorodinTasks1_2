@@ -57,6 +57,7 @@ public class SberbankASTMain {
      * Переход по ссылке подменю. На вход принимает названия элементов меню и подменю
      */
     public void goToSubLink(String topElement, String subElement )  {
+        try{
         for (Map<WebElement, WebElement> map : collectSubMenuLinks()){
             for(Entry entry: map.entrySet()) {
                 WebElement top = (WebElement) entry.getKey();
@@ -66,6 +67,9 @@ public class SberbankASTMain {
                     break;
                 }
             }
+        }
+        }catch(org.openqa.selenium.NoSuchElementException n){
+            System.out.println("Элементы не найден");
         }
     }
 

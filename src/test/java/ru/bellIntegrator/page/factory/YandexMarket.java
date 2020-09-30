@@ -40,26 +40,40 @@ public class YandexMarket {
      * Переход по вкладке основного меню
      */
     public void goByMainMenuTab(String tabName){
+        try{
         WebElement tab = driver.findElement(By.linkText("Электроника"));
         this.clickToElement(tab);
         tab.click();
+        }catch(org.openqa.selenium.NoSuchElementException n){
+            System.out.println("Элементы не найден");
+        }
     }
 
 
     /*
      * Выбор категории товара
      */
-    public  void addCategory(String category){
-        WebElement categoryTab = driver.findElement(By.xpath("//body//a[text()=\""+category+"\"]"));
-        this.clickToElement(categoryTab);
-    }
+    public  void addCategory(String category) {
+        try {
+            WebElement categoryTab = driver.findElement(By.xpath("//body//a[text()=\"" + category + "\"]"));
+            this.clickToElement(categoryTab);
+        }catch(org.openqa.selenium.NoSuchElementException n){
+                System.out.println("Элементы не найден");
+            }
+        }
+
+
 
     /*
      * Выбор фильтра "Производитель"
      */
     public void addMakerFilter(String maker){
-        WebElement makerTab = driver.findElement(By.xpath("//input[@type='checkbox'][@name='Производитель " +maker+"']"));
-        this.clickToElement(makerTab);
+        try {
+
+            WebElement makerTab = driver.findElement(By.xpath("//input[@type='checkbox'][@name='Производитель " + maker + "']"));
+            this.clickToElement(makerTab);
+        } catch (org.openqa.selenium.NoSuchElementException n){System.out.println("Элементы не найден");}
+
     }
 
     public void goToMainURL(){
