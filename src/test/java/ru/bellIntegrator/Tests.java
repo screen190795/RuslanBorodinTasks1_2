@@ -74,34 +74,18 @@ public class Tests extends TestBase{
         Assertions.assertTrue(testRates.get(0)<testRates.get(1),"некорректное отображение курса");
     }
 
-    @Test
-    public void SberbankMenu()  {
-        SberbankASTMain sberbankASTMain= new SberbankASTMain(driver);
-        sberbankASTMain.collectSubMenuLinks();
-        for (Map<WebElement, WebElement> map : sberbankASTMain.collectSubMenuLinks()) {
-            for (Map.Entry entry : map.entrySet()) {
-                WebElement top = (WebElement) entry.getKey();
-                WebElement sub = (WebElement) entry.getValue();
-                System.out.println(top.getText() + " : " + sub.getAttribute("innerText"));
-            }
-        }
-        System.out.println(sberbankASTMain.collectSubMenuLinks().size());
-        sberbankASTMain.goToSubLink("Главная","Контакты");
-        Assertions.assertTrue(1==1);
-    }
-
+    /*
+     * Проверка соответствия результатов поиска товара выбранному фильтру "Производитель"
+     */
         @Test
         public void yandexMarket() {
 
             YandexMarket yandexMarket = PageFactory.initElements(driver,YandexMarket.class);
             yandexMarket.goToMainURL();
-            yandexMarket.goToPage(yandexMarket.electroincsLink);
-            yandexMarket.electroincsLink.click();
-            yandexMarket.goToPage(yandexMarket.smartphonesLink);
-            yandexMarket.goToPage(yandexMarket.appleCheckBox);
+            yandexMarket.goByMainMenuTab("Электроника");
+            yandexMarket.addCategory("Смартфоны");
+            yandexMarket.addMakerFilter("Apple");
             yandexMarket.loadMore();
-            List<String> titles = yandexMarket.collectTitles();
-
-            Assertions.assertTrue(titles.stream().allMatch(x->x.contains("Apple")));
+            Assertions.assertTrue(yandexMarket.collectTitles().stream().allMatch(x->x.contains("Apple")), "Несоответствие овара производителю");
         }
 }

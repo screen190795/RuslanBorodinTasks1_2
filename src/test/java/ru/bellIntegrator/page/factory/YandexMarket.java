@@ -16,57 +16,83 @@ public class YandexMarket {
 
      private String marketMainURL="https://market.yandex.ru/";
 
-    //Вкладка главного меню "электроника"
-   @FindBy(how= How.LINK_TEXT, using = "Электроника")
-   public WebElement electroincsLink;
-
-    //Вкладка "смартфоны"
-   @FindBy(how=How.XPATH, using = "//body//a[text()=\"Смартфоны\"]")
-    public WebElement smartphonesLink;
-
-    //чекбокс- Производитель "Apple"
-    @FindBy(how=How.XPATH, using = "//input[@type='checkbox'][@name='Производитель Apple']")
-    public WebElement appleCheckBox;
 
     //кнопка в списке товаров "Показать ещё"
     @FindBy(how=How.XPATH, using = "//button[contains(text(),\"Показать ещё\")]")
     public WebElement showNextButton;
 
     //Название товара в результатах поиска
-    @FindAll(@FindBy(how=How.XPATH, using = "//div[@data-zone-name=\"SearchResults\"]//article//a[contains(@title,'Смартфон')]"))
+    @FindAll(@FindBy(how=How.XPATH, using = "//div[@data-zone-name=\"SearchResults\"]//article//a/span"))
     public List<WebElement> productTitles;
 
     public YandexMarket(WebDriver driver) {
         this.driver = driver;
     }
 
-    public void goToPage(WebElement linkElement){
+    public void clickToElement(WebElement linkElement){
         Actions builder = new Actions(driver);
         builder.moveToElement(linkElement).click(linkElement);
         Action mouseoverAndClick = builder.build();
         mouseoverAndClick.perform();
     }
 
+    /*
+     * Переход по вкладке основного меню
+     */
+    public void goByMainMenuTab(String tabName){
+        WebElement tab = driver.findElement(By.linkText("Электроника"));
+        this.clickToElement(tab);
+        tab.click();
+    }
+
+
+    /*
+     * Выбор категории товара
+     */
+    public  void addCategory(String category){
+        WebElement categoryTab = driver.findElement(By.xpath("//body//a[text()=\""+category+"\"]"));
+        this.clickToElement(categoryTab);
+    }
+
+    /*
+     * Выбор фильтра "Производитель"
+     */
+    public void addMakerFilter(String maker){
+        WebElement makerTab = driver.findElement(By.xpath("//input[@type='checkbox'][@name='Производитель " +maker+"']"));
+        this.clickToElement(makerTab);
+    }
+
     public void goToMainURL(){
         driver.get(marketMainURL);
     }
 
-    public void  loadMore(){
-        try {
-            Thread.sleep(3000);
-            this.goToPage(this.showNextButton);
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
+    /*
+     * Открытие всех товаров в списке
+     */
+    public void  loadMore()  {
+        try {
+        while (showNextButton.isDisplayed()) {
+            this.clickToElement(this.showNextButton);
+        }
+            } catch (org.openqa.selenium.NoSuchElementException n){
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
     }
 
+    /*
+     * Сбор названий всех товаров в результате поиска
+     */
     public List<String> collectTitles(){
         List<String> titles = this.productTitles.stream()
-                .map(x->x.getText()).collect(Collectors.toList());
-        titles.forEach(System.out::println);
-        System.out.println(titles.size());
+                .map(x->x.getText())
+                .collect(Collectors.toList());
         return  titles;
     }
+
 }
